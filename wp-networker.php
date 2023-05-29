@@ -10,6 +10,9 @@
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * Text Domain: wp-networker
 * Domain Path: /languages
+    
+Disclaimer:    
+WP Networker is a free software plugin provided "as-is" and without any expressed or implied warranties. This includes, but is not limited to, the implied warranties of merchantability and fitness for a particular purpose. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.
 */
 
 if (!defined('ABSPATH')) {
@@ -18,6 +21,11 @@ if (!defined('ABSPATH')) {
 
 include plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 include plugin_dir_path( __FILE__ ) . 'includes/admin-settings.php';
+require_once( plugin_dir_path( __FILE__ ) . 'includes/updates.php' );
+
+if (is_admin()) { 
+    $updater = new WP_Networker_Updater('wp-networker', 'totallywp', 'wp-networker');
+}
 
 // Adds the custom Network Admin menus.
 add_action( 'network_admin_menu', 'wp_ai_writer' );
@@ -44,7 +52,7 @@ function wp_ai_writer() {
 function aibg_network_admin_page() {
     ?>
 <div class="wrap">
-        <h1>AI Blog Generator</h1>
+        <h1>WP Networker</h1>
         <form id="aibg_form" method="post">
             <input type="hidden" name="aibg_action" value="generate_blog_posts">
             <?php wp_nonce_field('aibg_generate_blog_posts'); ?>
