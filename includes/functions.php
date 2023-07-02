@@ -78,7 +78,10 @@ function aibg_form_submission_handler() {
 			$messages = [
 				[
 					'role' => 'user',
+					// Until June 16th: 
 					'content' => 'Write a blog post about ' . $title . '. Write this blog post in an informal, first-person style. Do not include the post title in the main article, nor any other output as it is directly published. Output in HTML. NEVER mention you are an AI.'
+					// Starting June 16th:
+					//'content' => 'You are a professional blogger. Give me a  - content only - blog article. The article should be about ' . $title . '. Add html h2 and h3 tags. NEVER mention you are an AI. Remove the post title from your responses.'
 				]
 			];
 		
@@ -258,3 +261,21 @@ function aibg_get_categories() {
 	wp_send_json($categories);
 }
 add_action('wp_ajax_aibg_get_categories', 'aibg_get_categories');
+
+function get_first_post_image($post_id) {
+	$post = get_post($post_id);
+	
+	// Get the content of the post
+	$content = $post->post_content;
+	
+	// Search for the first <img> tag in the post content
+	preg_match('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $content, $matches);
+	
+	// If a match is found, return the URL of the image
+	if ($matches && isset($matches[1])) {
+		return $matches[1];
+	}
+	
+	// If no image is found, return an empty string or a default image URL
+	return '';
+}
